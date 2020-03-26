@@ -99,7 +99,10 @@ ann_dict = {
     'tierce':20,
     'quarte':50,
     'quinte':100,
-    'carre':100,
+    'carre_of_10s':100,
+    'carre_of_Qs':100,
+    'carre_of_Ks':100,
+    'carre_of_As':100,
     'carre_of_9s':150,
     'carre_of_Js':200
 }
