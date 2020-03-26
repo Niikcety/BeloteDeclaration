@@ -1,4 +1,46 @@
-from random import shuffle
+from random import shuffle, choice
+
+''' Notes from Discord call'''
+
+# class Team:
+#   def __init__(self, name, player1, player2):
+#       self.name = name
+#       self.players = []
+#       self.points = 0
+#       self.wins = 0
+
+
+
+class Player:
+    def __init__(self, name):
+        self.name = name
+        self.cards = []
+        self.announcements = []
+        self.team_name = "Mecheta"
+        self.points = 0
+        self.team_points = 0
+        self.team_wins = 0
+
+    def announce # = check cards for tricks and add them to announcements
+
+class Dealer(p1, p2, p3, p4)
+    def __init__(teams):
+        self.teams
+        self.players = teams[0].players[0]
+        self.round_number
+        self.game_number
+
+    # def order of dealing 
+    def dealing 
+    def declare_round_trump 
+    def resolve_announcement_conflicts 
+    
+    def score_round   60 100   #def add_round_score_to_team_score  
+    def add_round_score_to_results_txt
+    def add_round_hands_and_announcements_to_data_json
+    def check_for_wins
+
+''' Notes from Discord call'''
 
 # Function dealing a new hand
 ###########################################
@@ -62,9 +104,9 @@ ann_dict = {
     'carre_of_Js':200
 }
 
-announcements = ['belote', 'tierce', 'quinte']
+player.announcements = ['belote', 'tierce', 'quinte']
 
-points = 0
+team.points = 0
 
 for a in announcements:
     points += ann_dict[a]
@@ -85,7 +127,24 @@ class Player():
         self.hand = []
         self.announcements = []
 
+# Randomly choose trump for a round
 ###################################################
+def choose_trump():
+    trumps = ['clubs', 'diamonds', 'hearts', 'spades', 'no trumps', 'all trumps']
+    return choice(trumps)
+
+
+# Rotate order
+###################################################
+def order(round_number):
+    positions = ['N', 'E', 'S', 'W']
+    
+    if round_number <= 4: 
+        round_number, 
+    else: 
+        round_number % 4
+    
+    return positions[round_number:]+positions[:round_number]
 
 def main():
     pass
