@@ -115,6 +115,8 @@ class TestToJson(unittest.TestCase):
             jsonned = json.load(read_file)
 
         self.assertEqual(jsonned, dealer.result_dict)
+	
+
 
 
 if __name__ == '__main__':
