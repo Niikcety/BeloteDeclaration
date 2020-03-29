@@ -93,7 +93,6 @@ class ToTxt(WriteInFile):
     def end_line(self):
         len_to_first_line = len(self.players[0].team_name) + 9
         string = f'({self.players[0].team_wins})' + len_to_first_line*' ' + '| ' + f'({self.players[2].team_wins})' + '\n'
-        print(string)
         self.write_in_file(self.name, string, 'a')        
 
 
