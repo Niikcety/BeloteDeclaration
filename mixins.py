@@ -7,9 +7,17 @@ class ToJson():
         self.result_dict["game 1"] = dict()
         self.result_dict["game 1"]["round 1"] = dict()
 
+    def save_to_json(self, indent=4):
+        name = self.players[0].team_name + '_vs_' + \
+            self.players[1].team_name + ".json"
+        f = open(name, "w")
+        f.write(json.dumps(self.result_dict, indent=indent))
+
+        f.close()
+
     def to_json(self):
-        game_number = "game " + str(self.game_counter + 1)
-        round_number = "round " + str(self.round_counter + 1)
+        game_number = "game " + str(self.game_counter)
+        round_number = "round " + str(self.round_counter)
         # if there isn't dictionary with associated with this game it creates new
         if not game_number in self.result_dict:
             self.result_dict[game_number] = dict()
@@ -25,29 +33,22 @@ class ToJson():
 
         self.save_to_json()
 
-    def save_to_json(self, indent=4):
-        name = self.players[0].team_name + '_vs_' + \
-            self.players[2].team_name + ".json"
-        f = open(name, "w")
-        f.write(json.dumps(self.result_dict, indent=indent))
-
-        f.close()
 
     def get_team1_dict(self):
         team_dict = dict()
         team_dict[self.players[0].name] = {
-            "cards": self.players[0].hand, "announcements": self.players[0].announcements, "points": self.players[0].points}
-        team_dict[self.players[1].name] = {
-            "cards": self.players[1].hand, "announcements": self.players[1].announcements, "points": self.players[1].points}
+            "cards": self.players[0].hand, "announcements": self.players[0].valid_announcements, "points": self.players[0].points}
+        team_dict[self.players[2].name] = {
+            "cards": self.players[2].hand, "announcements": self.players[2].valid_announcements, "points": self.players[1].points}
 
         return team_dict
 
     def get_team2_dict(self):
         team_dict = dict()
-        team_dict[self.players[2].name] = {
-            "cards": self.players[0].hand, "announcements": self.players[0].announcements, "points": self.players[0].points}
+        team_dict[self.players[1].name] = {
+            "cards": self.players[1].hand, "announcements": self.players[1].valid_announcements, "points": self.players[0].points}
         team_dict[self.players[3].name] = {
-            "cards": self.players[1].hand, "announcements": self.players[1].announcements, "points": self.players[1].points}
+            "cards": self.players[3].hand, "announcements": self.players[3].valid_announcements, "points": self.players[1].points}
 
         return team_dict
 
@@ -61,8 +62,8 @@ class WriteInFile():
 class ToTxt(WriteInFile):
     # printing names of the teams
     def starter_line(self):
-        self.name = self.players[0].team_name + '_vs_' + self.players[2].team_name + ".txt"
-        entry_string = 6*' ' + self.players[0].team_name + 6*' ' + '|' + 6*' ' + self.players[2].team_name + 6*' ' + '\n'
+        self.name = self.players[0].team_name + '_vs_' + self.players[1].team_name + ".txt"
+        entry_string = 6*' ' + self.players[0].team_name + 6*' ' + '|' + 6*' ' + self.players[1].team_name + 6*' ' + '\n'
         
         self.write_in_file(self.name, entry_string, 'w')
 
