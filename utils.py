@@ -73,12 +73,12 @@ seq_hierarchy = {
     (30, 31, 32, 33, 34) : ['quinte', 5.3]
     }
 
-def validate_all(all_ann, lad):
+def validate_all(all_ann, lad=0):
     control = []
 
     for ann in all_ann:
-        
-        if tuple(ann) not in seq_hierarchy:
+    # if ann not in dict, ann is belote or carre  
+        if tuple(ann[0]) not in seq_hierarchy:
             control.append(ann)
         elif seq_hierarchy[tuple(ann)][1] >= lad:
             control.append(ann)

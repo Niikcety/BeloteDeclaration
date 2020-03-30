@@ -1,5 +1,5 @@
 from random import shuffle, choice
-from untils import declarations_in, set_t1_lad, set_t2_lad, validate_all
+from utils import declarations_in, set_lad, validate_all
 from mixins import ToJson, ToTxt
 
 class Player:
@@ -25,15 +25,16 @@ class Dealer(ToJson, ToTxt):
         self.team1_lad = 0 #lowest allowed declaration, this = opposing team's highest declaration
         self.team2_lad = 0  #lowest allowed declaration, this = opposing team's highest declaration
 
-    def order(self, round_counter):
+    def order(self):
         order = [0, 1, 2, 3]
-        
-        if round_counter <= 4: 
-            round_counter, 
+        rc = self.round_counter
+
+        if self.round_counter <= 4: 
+            pass 
         else:
-            round_counter = round_counter % 4
+            rc = self.round_counter % 4
         
-        return order[round_counter-1:]+order[:round_counter-1]
+        return order[rc-1:]+order[:rc-1]
 
     def dealing(self, order):
         suits = 'C', 'D', 'H', 'S' 
@@ -52,37 +53,32 @@ class Dealer(ToJson, ToTxt):
         self.round_trump = choice(trumps)
 
     def resolve_announcement_conflicts(self, order):
-        p = self.players
 
-            p[order][0].announce()
-            p[order][0].valid_announcements = validate_all(p[order][0].all_announcements)
-            self.team2_lad = set_lad(p[order][0].valid_announcements+p[order][2].valid_announcements)
+        self.players[order[0]].announce()
+        self.players[order[0]].valid_announcements = validate_all(self.players[order[0]].all_announcements)
+        self.team2_lad = set_lad(self.players[order[0]].valid_announcements+self.players[order[2]].valid_announcements)
 
-            p[order][1].announce()
-            p[order][1].valid_announcements = validate_all(p[order][1].all_announcements)
-            self.team1_lad = set_lad(p[order][1].valid_announcements+p[order][3].valid_announcements)
+        self.players[order[1]].announce()
+        self.players[order[1]].valid_announcements = validate_all(self.players[order[1]].all_announcements,self.team2_lad)
+        self.team1_lad = set_lad(self.players[order[1]].valid_announcements+self.players[order[3]].valid_announcements)
 
-            p[order][2].announce()
-            p[order][2].valid_announcements = validate_all(p[order][2].all_announcements)
-            self.team2_lad = set_lad(p[order][0].valid_announcements+p[order][2].valid_announcements)
+        self.players[order[2]].announce()
+        self.players[order[2]].valid_announcements = validate_all(self.players[order[2]].all_announcements,self.team1_lad)
+        self.team2_lad = set_lad(self.players[order[0]].valid_announcements+self.players[order[2]].valid_announcements)
 
-            p[order][3].announce()
-            p[order][3].valid_announcements = validate_all(p[order][3].all_announcements)
-            self.team1_lad = set_lad(p[order][1].valid_announcements+p[order][3].valid_announcements)
+        self.players[order[3]].announce()
+        self.players[order[3]].valid_announcements = validate_all(self.players[order[3]].all_announcements,self.team2_lad)
+        self.team1_lad = set_lad(self.players[order[1]].valid_announcements+self.players[order[3]].valid_announcements)
 
-            p[order][0].valid_announcements = validate_all(p[order][0].all_announcements)
-            p[order][1].valid_announcements = validate_all(p[order][1].all_announcements)
+        self.players[order[0]].valid_announcements = validate_all(self.players[order[0]].all_announcements,team1_lad)
+        self.players[order[1]].valid_announcements = validate_all(self.players[order[1]].all_announcements,team2_lad)
 
     def score_round(): #def add_round_score_to_team_score  
-    
-
-    def add_round_score_to_results_txt():
-        pass
-
-    def add_round_hands_and_announcements_to_data_json():
         pass
 
     def check_for_wins():
+        self.write_result()
+        self.to_json()
         self.players[0].team_points += self.players[0].points + self.players[2].points
         self.players[2].team_points += self.players[0].points + self.players[2].points
         self.players[0].points = 0
@@ -98,18 +94,18 @@ class Dealer(ToJson, ToTxt):
             if self.players[0].team_points == max(self.players[0].team_points, self.players[1].team_points):
                 self.players[0].team_wins +=1
                 self.players[2].team_wins +=1
-                self.end_line()
+                self.score_line()
             else:
                 self.players[1].team_wins +=1
                 self.players[3].team_wins +=1
-                self.end_line()
+                self.score_line()
         
         elif self.players[0].team_points > 150:
             self.players[0].team_wins +=1
             self.players[2].team_wins +=1
-            self.end_line()
+            self.score_line()
 
         elif self.players[1].team_points > 150:
             self.players[1].team_wins +=1
             self.players[3].team_wins +=1
-            self.end_line()
+            self.score_line()

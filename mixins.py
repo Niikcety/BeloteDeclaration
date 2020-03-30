@@ -73,14 +73,14 @@ class ToTxt(WriteInFile):
 
     # printing results if round points are equal to zero it won't add them
     def write_result(self):
-        if(self.players[0].points + self.players[1].points == 0):
+        if(self.players[0].points + self.players[2].points == 0):
             score1 = str(self.players[0].team_points) 
         else:
-            score1 = str(self.players[0].team_points) + ' + ' + str(self.players[0].points + self.players[1].points)
-        if(self.players[2].points + self.players[3].points == 0):
-            score2 = str(self.players[2].team_points)
+            score1 = str(self.players[0].team_points) + ' + ' + str(self.players[0].points + self.players[2].points)
+        if(self.players[1].points + self.players[3].points == 0):
+            score2 = str(self.players[1].team_points)
         else:
-            score2 = str(self.players[2].team_points) + ' + ' + str(self.players[2].points + self.players[3].points) 
+            score2 = str(self.players[1].team_points) + ' + ' + str(self.players[2].points + self.players[3].points) 
         
         len_to_first_line = len(self.players[0].team_name) + 12
 
@@ -96,3 +96,7 @@ class ToTxt(WriteInFile):
         self.write_in_file(self.name, string, 'a')        
 
 
+    def score_line(self):
+        self.line_of_equals()
+        self.end_line()
+        self.line_of_equals()
