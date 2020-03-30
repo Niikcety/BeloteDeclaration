@@ -1,5 +1,5 @@
 import unittest
-from utils import numbify, carre_in, seq_in
+from utils import declarations_in, numbify, carre_in, seq_in, set_lad, validate_all
 
 class TestFunctionsInUtils(unittest.TestCase):
 	
@@ -57,6 +57,41 @@ class TestFunctionsInUtils(unittest.TestCase):
 
 		self.assertEqual(result, expected)
 
+	def test_hand_with_nothing_in_it(self):
+		hand = ['AC', '9H', '8C', '9S', '7C', '9D', '10D', 'QD']
+
+		result = declarations_in(hand)
+		expected = [[],[]]
+
+
+	def test_setting_of_lad(self):
+		an1 = [[5, 6], [5, 6, 7]]
+		an2 = [[28, 29, 30, 31]]
+		opp_ann = an1+an2
+
+		result = set_lad(opp_ann)
+		expected = 4.1
+
+		self.assertEqual(result, expected)
+
+	def test_setting_of_lad_with_empty_opp_announcements(self):
+		an1 = [[], []]
+		an2 = [[]]
+		opp_ann = an1+an2
+
+		result = set_lad(opp_ann)
+		expected = 0
+
+		self.assertEqual(result, expected)
+
+	def test_invalid_tierce_and_valid_quinte(self):
+		ann = [[0, 1, 2],[9, 8, 10, 11, 12]]
+		lad = 4
+		
+		result = validate_all(ann, 4)
+		expected = [[9, 8, 10, 11, 12]]
+
+		self.assertEqual(result, expected)
 
 if __name__ == '__main__':
 	unittest.main()
