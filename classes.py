@@ -73,7 +73,7 @@ class Dealer():
 			p[order][1].valid_announcements = validate_all(p[order][1].all_announcements)
 
 	def score_round(): #def add_round_score_to_team_score  
-		pass
+
 
 	def add_round_score_to_results_txt():
 		pass
@@ -82,4 +82,29 @@ class Dealer():
 		pass
 
 	def check_for_wins():
-		pass
+		self.players[0].team_points += self.players[0].points + self.players[2].points
+		self.players[2].team_points += self.players[0].points + self.players[2].points
+		self.players[0].points = 0
+		self.players[2].points = 0
+
+		self.players[1].team_points += self.players[1].points + self.players[3].points
+		self.players[3].team_points += self.players[1].points + self.players[3].points
+		self.players[1].points = 0
+		self.players[3].points = 0
+		
+		if self.players[0].team_points > 150 and self.players[1].team_points > 150:
+			
+			if self.players[0].team_points == max(self.players[0].team_points, self.players[1].team_points):
+				self.players[0].team_wins +=1
+				self.players[2].team_wins +=1
+			else:
+				self.players[1].team_wins +=1
+				self.players[3].team_wins +=1
+		
+		elif self.players[0].team_points > 150:
+			self.players[0].team_wins +=1
+			self.players[2].team_wins +=1
+
+		elif self.players[1].team_points > 150:
+			self.players[1].team_wins +=1
+			self.players[3].team_wins +=1
