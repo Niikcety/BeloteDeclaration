@@ -10,18 +10,40 @@ of different suites in the dictionary below.'''
 
 seq_dict = {k: v for k, v in zip(deck, num)}
 
-def seq_in(cards):
-	ans = 1
-	tmp = 1
+def resolve(sequences, control):
+    resolved_s = []
 
-	for i in range(len(cards)-1):
+    for seq in sequences:
 
-	    if sorted(cards)[i]+1 == sorted(cards)[i+1]:
-	        tmp +=1
-	    else:
-	        ans = max(ans, tmp)
-	        tmp = 1
-	        
+        if len(seq) == 1:
+        	pass
+
+        elif len(seq) == 2 and seq == [5, 6] or seq == [14, 15] or seq == [23, 24] or seq == [32, 33]:
+        	resolved_s.append(seq)
+        
+        elif len(seq) > 2 and not any(c in seq for con in control for c in con):
+        	resolved_s.append(seq)
+
+    return resolved_s
+
+def seq_in(cards, control=[]):
+    sequences = []
+
+    for i, card in enumerate(cards):
+
+        if i == 0:
+            sequences.append([])
+            sequences[i].append(card)
+
+        elif i != 0 and sequences[-1][-1] == card-1:
+            sequences[-1].append(card)
+
+        else:
+            sequences.append([])
+            sequences[-1].append(card)
+
+    return resolve(sequences, control)
+
 def carre_in(cards):
 	result = []
 
@@ -32,27 +54,27 @@ def carre_in(cards):
 
 		elif i == 2:
 			if i+9 and i+18 and i+27 in cards:
-				result.append('carre_of_9s')
+				result.append([2, 11, 20, 29])
 
 		elif i == 3:
 			if i+9 and i+18 and i+27 in cards:
-				result.append('carre_of_10s')
+				result.append([3, 12, 21, 30])
 
 		elif i == 4:
 			if i+9 and i+18 and i+27 in cards:
-				result.append('carre_of_Js')
+				result.append([4, 13, 22, 31])
 
 		elif i == 5:
 			if i+9 and i+18 and i+27 in cards:
-				result.append('carre_of_Qs')
+				result.append([5, 14 ,23, 32])
 
 		elif i == 6:
 			if i+9 and i+18 and i+27 in cards:
-				result.append('carre_of_Ks')
+				result.append([6, 15, 24, 33])
 
 		elif i == 7:
 			if i+9 and i+18 and i+27 in cards:
-				result.append('carre_of_As')
+				result.append([7, 16, 25, 34])
 
 	return result
 
@@ -66,7 +88,7 @@ def numbify(hand):
 
 def declarations_in(hand):
 	cards = numbify(hand)
-	carre_in(cards)
-	seq_in(cards)
+	carre = carre_in(cards)
+	seq_in(cards, carre)
 
 	

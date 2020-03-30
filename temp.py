@@ -139,15 +139,15 @@ def choose_trump():
 
 # Rotate order
 ###################################################
-def order(round_number):
-    positions = ['N', 'E', 'S', 'W']
+def order(round_counter):
+    positions = [0, 1, 2, 3]
     
-    if round_number <= 4: 
-        round_number, 
+    if round_counter <= 4: 
+        round_counter, 
     else: 
-        round_number % 4
+        round_counter % 4
     
-    return positions[round_number:]+positions[:round_number]
+    return positions[round_counter:]+positions[:round_counter]
 
 def main():
     pass

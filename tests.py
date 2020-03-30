@@ -1,5 +1,5 @@
 import unittest
-from utils import numbify, carre_in
+from utils import numbify, carre_in, seq_in
 
 class TestFunctionsInUtils(unittest.TestCase):
 	
@@ -16,7 +16,7 @@ class TestFunctionsInUtils(unittest.TestCase):
 		cards = numbify(hand)
 
 		result = carre_in(cards)
-		expected = ['carre_of_9s']
+		expected = [[2, 11, 20, 29]]
 
 		self.assertEqual(result, expected)
 
@@ -25,7 +25,7 @@ class TestFunctionsInUtils(unittest.TestCase):
 		cards = numbify(hand)
 
 		result = carre_in(cards)
-		expected = ['carre_of_9s', 'carre_of_As']
+		expected = [[2, 11, 20, 29], [7, 16, 25, 34]]
 
 		self.assertEqual(result, expected)
 
@@ -34,6 +34,25 @@ class TestFunctionsInUtils(unittest.TestCase):
 		cards = numbify(hand)
 
 		result = carre_in(cards)
+		expected = []
+
+		self.assertEqual(result, expected)
+
+	def test_hand_with_belote_and_two_tierces(self):
+		hand = ['KH', 'QH', '8C', '7C', '9C', '9D', '10D', 'JD']
+		cards = numbify(hand)
+
+		result = seq_in(cards)
+		expected = [[0, 1, 2], [11, 12, 13], [23, 24]]
+
+		self.assertEqual(result, expected)
+
+	def test_hand_with_carre_and_tierce_thats_part_of_the_carre(self):
+		hand = ['AC', '9H', '8C', '9S', '9C', '9D', '10D', 'JD']
+		cards = numbify(hand)
+		control = carre_in(cards)
+
+		result = seq_in(cards, control)
 		expected = []
 
 		self.assertEqual(result, expected)
