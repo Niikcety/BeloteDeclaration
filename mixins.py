@@ -17,10 +17,9 @@ class ToJson():
         if not round_number in self.result_dict[game_number]:
             self.result_dict[game_number][round_number] = dict()
 
-        '''
-            TODO the line below should be equal to method getting the call
-            self.result_dict[game_number][round_number]['contract'] = self.get_call()
-        '''
+        
+        
+        self.result_dict[game_number][round_number]['contract'] = self.round_trump
         self.result_dict[game_number][round_number][self.players[0].team_name] = self.get_team1_dict()
         self.result_dict[game_number][round_number][self.players[2].team_name] = self.get_team2_dict()
 

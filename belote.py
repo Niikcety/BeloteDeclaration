@@ -18,7 +18,8 @@ players = [p1, p2, p3, p4]
 d = Dealer(players)
 
 while not match_won:
-	order = d.order()
-	d.dealing(order)
-	d.declare_round_trump()
-	d.resolve_announcement_conflicts()
+    order = d.order()
+    d.dealing(order)
+    d.declare_round_trump()
+    d.resolve_announcement_conflicts()
+    
