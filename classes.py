@@ -56,29 +56,24 @@ class Dealer(ToJson, ToTxt):
 
     def resolve_announcement_conflicts(self, order):
 
-        self.players[order[0]].announce()
-        self.players[order[0]].valid_announcements = validate_all(self.players[order[0]].all_announcements)
-        self.team2_lad = set_lad(self.players[order[0]].valid_announcements+self.players[order[2]].valid_announcements)
+        for i in range(2):
 
-        self.players[order[1]].announce()
-        self.players[order[1]].valid_announcements = validate_all(self.players[order[1]].all_announcements,self.team2_lad)
-        self.team1_lad = set_lad(self.players[order[1]].valid_announcements+self.players[order[3]].valid_announcements)
-
-        self.players[order[2]].announce()
-        self.players[order[2]].valid_announcements = validate_all(self.players[order[2]].all_announcements,self.team1_lad)
-        self.team2_lad = set_lad(self.players[order[0]].valid_announcements+self.players[order[2]].valid_announcements)
-
-        self.players[order[3]].announce()
-        self.players[order[3]].valid_announcements = validate_all(self.players[order[3]].all_announcements,self.team2_lad)
-        self.team1_lad = set_lad(self.players[order[1]].valid_announcements+self.players[order[3]].valid_announcements)
-
-        self.players[order[0]].valid_announcements = validate_all(self.players[order[0]].all_announcements,self.team1_lad)
-        self.players[order[1]].valid_announcements = validate_all(self.players[order[1]].all_announcements,self.team2_lad)
+            for j in range(4):
+                
+                j = j % 4
+                
+                if order[j] == 0 or order[j] == 2:
+                    self.players[order[j]].announce()
+                    self.players[order[j]].valid_announcements = validate_all(self.players[order[j]].all_announcements, self.round_trump, self.team1_lad)[0]
+                    self.players[order[j]].points = validate_all(self.players[order[j]].all_announcements, self.round_trump, self.team1_lad)[1]
+                    self.team2_lad = set_lad(self.players[order[j]].valid_announcements + self.players[order[(j+2)%4]].valid_announcements)
+                else:
+                    self.players[order[j]].announce()
+                    self.players[order[j]].valid_announcements = validate_all(self.players[order[j]].all_announcements, self.round_trump, self.team2_lad)[0]
+                    self.players[order[j]].points = validate_all(self.players[order[j]].all_announcements, self.round_trump, self.team2_lad)[1]
+                    self.team1_lad = set_lad(self.players[order[j]].valid_announcements + self.players[order[(j+2)%4]].valid_announcements)
 
     def score_round(self): #def add_round_score_to_team_score  
-        pass
-
-    def check_for_wins(self):
         self.write_result()
         self.to_json()
         self.players[0].team_points += self.players[0].points + self.players[2].points
@@ -91,7 +86,8 @@ class Dealer(ToJson, ToTxt):
         self.players[1].points = 0
         self.players[3].points = 0
 
-        
+    def check_for_won_games(self):
+
         if self.players[0].team_points > 150 and self.players[1].team_points > 150:
             
             if self.players[0].team_points == max(self.players[0].team_points, self.players[1].team_points):
@@ -100,12 +96,18 @@ class Dealer(ToJson, ToTxt):
                 self.score_line()
                 self.game_counter += 1
                 self.round_counter = 1
+
+                for i in range(4):
+                    self.players[i].team_points = 0
             else:
                 self.players[1].team_wins +=1
                 self.players[3].team_wins +=1
                 self.score_line()
                 self.game_counter += 1
                 self.round_counter = 1
+
+                for i in range(4):
+                    self.players[i].team_points = 0
         
         elif self.players[0].team_points > 150:
             self.players[0].team_wins +=1
@@ -114,13 +116,24 @@ class Dealer(ToJson, ToTxt):
             self.game_counter += 1
             self.round_counter = 1
 
+            for i in range(4):
+                self.players[i].team_points = 0
+
         elif self.players[1].team_points > 150:
             self.players[1].team_wins +=1
             self.players[3].team_wins +=1
             self.score_line()
             self.game_counter += 1
             self.round_counter = 1
+            
+            for i in range(4):
+                self.players[i].team_points = 0
 
         else:
             self.round_counter += 1
+
+    def check_for_match_win(self):
+        for i in range(2):
+            if self.players[i].team_wins == 2:
+                return True
         

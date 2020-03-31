@@ -1,186 +1,169 @@
-suites = ['C', 'D', 'H', 'S']
-faces = ['7', '8', '9', '10', 'J', 'Q', 'K', 'A']
-deck = [f+s for s in suites for f in faces]
+from dicts import (
+    int_of_card_dict, 
+    belote_dict,
+    carre_dict,
+    tqq_dict,
+    lad_dict
+    )
 
-num = [i for i in range(35)]
-del num[8::9] 
-'''This removes 8, 17 & 26 from the list. 
-The idea is to give non-sequential values to Aces and 7s 
-of different suites in the dictionary below.''' 
+def validate_tqq(tqq, lad):
+    string = []
+    points = 0
 
-seq_dict = {k: v for k, v in zip(deck, num)}
+    for t in tqq:
+        if tqq_dict[t][2] > lad:
+            string.append(tqq_dict[t][0])
+            points += tqq_dict[t][1]
 
-seq_hierarchy = {
-    (0, 1, 2) : ['tierce', 3.0],
-    (1, 2, 3) : ['tierce', 3.1],
-    (2, 3, 4) : ['tierce', 3.2],
-    (3, 4, 5) : ['tierce', 3.3],
-    (4, 5, 6) : ['tierce', 3.4],
-    (5, 6, 7) : ['tierce', 3.5],
-    (0, 1, 2, 3) : ['quarte', 4.0],
-    (1, 2, 3, 4) : ['quarte', 4.1],
-    (2, 3, 4, 5) : ['quarte', 4.2],
-    (3, 4, 5, 6) : ['quarte', 4.3],
-    (4, 5, 6, 7) : ['quarte', 4.4],
-    (0, 1, 2, 3, 4) : ['quinte', 5.0],
-    (1, 2, 3, 4, 5) : ['quinte', 5.1],
-    (2, 3, 4, 5, 6) : ['quinte', 5.2],
-    (3, 4, 5, 6, 7) : ['quinte', 5.3],
-    (9, 10, 11) : ['tierce', 3.0],
-    (10, 11, 12) : ['tierce', 3.1], 
-    (11, 12, 13) : ['tierce', 3.2],
-    (12, 13, 14) : ['tierce', 3.3],
-    (13, 14, 15) : ['tierce', 3.4],
-    (14, 15, 16) : ['tierce', 3.5],
-    (9, 10, 11, 12) : ['quarte', 4.0],
-    (10, 11, 12, 13) : ['quarte', 4.1], 
-    (11, 12, 13, 14) : ['quarte', 4.2],
-    (12, 13, 14, 15) : ['quarte', 4.3],
-    (13, 14, 15, 16) : ['quarte', 4.4],
-    (9, 10, 11, 12, 13) : ['quinte', 5.0],
-    (10, 11, 12, 13, 14) : ['quinte', 5.1], 
-    (11, 12, 13, 14, 15) : ['quinte', 5.2],
-    (12, 13, 14, 15, 16) : ['quinte', 5.3],
-    (18, 19, 20) : ['tierce', 3.0],
-    (19, 20, 21) : ['tierce', 3.1],
-    (20, 21, 22) : ['tierce', 3.2],
-    (21, 22, 23) : ['tierce', 3.3],
-    (22, 23, 24) : ['tierce', 3.4],
-    (23, 24, 25) : ['tierce', 3.5],
-    (18, 19, 20, 21) : ['quarte', 4.0],
-    (19, 20, 21, 22) : ['quarte', 4.1],
-    (20, 21, 22, 23) : ['quarte', 4.2],
-    (21, 22, 23, 24) : ['quarte', 4.3],
-    (22, 23, 24, 25) : ['quarte', 4.4],
-    (18, 19, 20, 21, 22) : ['quinte', 5.0],
-    (19, 20, 21, 22, 23) : ['quinte', 5.1],
-    (20, 21, 22, 23, 24) : ['quinte', 5.2],
-    (21, 22, 23, 24, 25) : ['quinte', 5.3],
-    (27, 28, 29) : ['tierce', 3.0],
-    (28, 29, 30) : ['tierce', 3.1], 
-    (29, 30, 31) : ['tierce', 3.2],
-    (30, 31, 32) : ['tierce', 3.3],
-    (31, 32, 33) : ['tierce', 3.4],
-    (32, 33, 34) : ['tierce', 3.5],
-    (27, 28, 29, 30) : ['quarte', 4.0],
-    (28, 29, 30, 31) : ['quarte', 4.1],
-    (29, 30, 31, 32) : ['quarte', 4.2],
-    (30, 31, 32, 33) : ['quarte', 4.3],
-    (31, 32, 33, 34) : ['quarte', 4.4],
-    (27, 28, 29, 30, 31) : ['quinte', 5.0],
-    (28, 29, 30, 31, 32) : ['quinte', 5.1],
-    (29, 30, 31, 32, 33) : ['quinte', 5.2],
-    (30, 31, 32, 33, 34) : ['quinte', 5.3]
-    }
+    return string, points
 
-def validate_all(all_ann, lad=0):
-    control = []
+def validate_carres(carres):
+    string = []
+    points = 0
 
-    for ann in all_ann:
-        try:
-    # if ann not in dict, ann is belote or carre  
-            if tuple(ann[0]) not in seq_hierarchy:
-                control.append(ann)
-            elif seq_hierarchy[tuple(ann[0])][1] >= lad:
-                control.append(ann)
-        except IndexError:
+    for car in carres:
+        if car == (0,):
             pass
-    return control
 
+        else:
+            string.append(carre_dict[car][0])
+            points += carre_dict[car][1]
 
-def set_lad(opposing_ann):
+    return string, points
+
+def validate_belotes(belotes, trump):
+    string = []
+    points = 0
+
+    for bel in belotes:
+        if bel == (0,):
+            pass
+
+        elif bel == (5, 6):
+            if trump == 'Clubs' or trump == 'All trumps':
+                string.append(belote_dict[bel][0])
+                points += belote_dict[bel][1]
+
+        elif bel == (14, 15):
+            if trump == 'Diamonds' or trump == 'All trumps':
+                string.append(belote_dict[bel][0])
+                points += belote_dict[bel][1]
+
+        elif bel == (23, 24):
+            if trump == 'Hearts' or trump == 'All trumps':
+                string.append(belote_dict[bel][0])
+                points += belote_dict[bel][1]
+
+        elif bel == (32, 33):
+            if trump == 'Spades' or trump == 'All trumps':
+                string.append(belote_dict[bel][0])
+                points += belote_dict[bel][1]
+
+    return string, points
+
+def validate_all(announcements, trump, lad=0):
+    anns = []
+    points = 0
+
+    anns += validate_belotes(announcements[0], trump)[0]
+    points += validate_belotes(announcements[0], trump)[1]
+
+    anns += validate_carres(announcements[1])[0]
+    points += validate_carres(announcements[1])[1]
+
+    anns += validate_tqq(announcements[2], lad)[0]
+    points += validate_tqq(announcements[2], lad)[1]
+
+    return anns, points
+
+def set_lad(opposing_announcements):
     control = []
 
-    for ann in opposing_ann:
-        
-        if tuple(ann[0]) in seq_hierarchy:
-            control.append(seq_hierarchy[tuple(ann[0])][1])
+    for ann in opposing_announcements:
+        control.append(lad_dict[ann])
 
     try:
         return max(control)
-    except:
+    except ValueError:
         return 0
 
-
-def resolve(sequences, control):
-    resolved_s = []
+def check_if(sequences, carre):
+    checked_tqq = []
 
     for seq in sequences:
 
-        if len(seq) == 1:
+        if len(seq) < 3:
             pass
-
-        elif len(seq) == 2 and seq == [5, 6] or seq == [14, 15] or seq == [23, 24] or seq == [32, 33]:
-            resolved_s.append(seq)
         
-        elif len(seq) > 2 and not any(c in seq for con in control for c in con):
-            resolved_s.append(seq)
+        elif not any(s in seq for c in carre for s in c):
+            checked_tqq.append(tuple(seq))
 
-    return resolved_s
+    if checked_tqq == []:
+        checked_tqq.append((0,))
 
-def seq_in(cards, control=[]):
-    sequences = []
+    return checked_tqq
+
+def tqq_in(cards, carre=[]):
+    tqq = []
 
     for i, card in enumerate(cards):
 
         if i == 0:
-            sequences.append([])
-            sequences[i].append(card)
+            tqq.append([])
+            tqq[i].append(card)
 
-        elif i != 0 and sequences[-1][-1] == card-1:
-            sequences[-1].append(card)
+        elif i != 0 and tqq[-1][-1] == card-1:
+            tqq[-1].append(card)
 
         else:
-            sequences.append([])
-            sequences[-1].append(card)
+            tqq.append([])
+            tqq[-1].append(card)
 
-    return resolve(sequences, control)
+    return check_if(tqq, carre)
 
-def carre_in(cards):
-    result = []
+def carres_in(cards):
+    carres = []
+    
+    for i in range(2,8):
+        j = i + 9
+        k = i + 18
+        l = i + 27
 
-    for i in cards:
+        if i in cards and j in cards and k in cards and l in cards:
+            carres.append((i, j, k, l))
 
-        if i == 0 or i == 1:
-            pass
+    if carres == []:
+        carres.append((0,))
+    
+    return carres
 
-        elif i == 2:
-            if i+9 and i+18 and i+27 in cards:
-                result.append([2, 11, 20, 29])
+def belotes_in(cards):
+    belotes = []
 
-        elif i == 3:
-            if i+9 and i+18 and i+27 in cards:
-                result.append([3, 12, 21, 30])
+    for i in range(5, 34, 9):
+        j = i + 1
 
-        elif i == 4:
-            if i+9 and i+18 and i+27 in cards:
-                result.append([4, 13, 22, 31])
+        if i in cards and j in cards:
+            belotes.append((i, j))
 
-        elif i == 5:
-            if i+9 and i+18 and i+27 in cards:
-                result.append([5, 14 ,23, 32])
+    if belotes == []:
+        belotes.append((0,))
 
-        elif i == 6:
-            if i+9 and i+18 and i+27 in cards:
-                result.append([6, 15, 24, 33])
-
-        elif i == 7:
-            if i+9 and i+18 and i+27 in cards:
-                result.append([7, 16, 25, 34])
-    return result
+    return belotes
 
 def numbify(hand):
     cards = []
 
     for card in hand:
-        cards.append(seq_dict[card])
+        cards.append(int_of_card_dict[card])
 
     return sorted(cards)
 
 def declarations_in(hand):
     cards = numbify(hand)
-    carre = carre_in(cards)
-    seqs = seq_in(cards, carre)
 
-    return [seqs, carre]
+    belotes = belotes_in(cards)
+    carres = carres_in(cards)
+    tqq = tqq_in(cards, carres) #tqq = tierce, quarte, quinte
 
+    return [belotes, carres, tqq]
