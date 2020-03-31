@@ -27,14 +27,14 @@ class ToJson():
 
         self.result_dict[game_number][round_number]['contract'] = self.round_trump
         self.result_dict[game_number][round_number][self.players[0].team_name] = self.get_team1_dict()
-        self.result_dict[game_number][round_number][self.players[2].team_name] = self.get_team2_dict()
+        self.result_dict[game_number][round_number][self.players[1].team_name] = self.get_team2_dict()
 
 
 
     def get_team1_dict(self):
         team_dict = dict()
         team_dict[self.players[0].name] = {
-            "cards": 12, "announcements": self.players[0].valid_announcements, "points": self.players[0].points}
+            "cards": self.players[0].hand, "announcements": self.players[0].valid_announcements, "points": self.players[0].points}
         team_dict[self.players[2].name] = {
             "cards": self.players[2].hand, "announcements": self.players[2].valid_announcements, "points": self.players[2].points}
 
