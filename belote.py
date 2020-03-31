@@ -30,5 +30,3 @@ while not match_won:
     d.score_round()
     d.check_for_wins()
     # TODO: If 2 wins match_won = TRUE
-    
-
