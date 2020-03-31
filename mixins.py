@@ -29,24 +29,23 @@ class ToJson():
         self.result_dict[game_number][round_number][self.players[0].team_name] = self.get_team1_dict()
         self.result_dict[game_number][round_number][self.players[2].team_name] = self.get_team2_dict()
 
-        #self.save_to_json()
 
 
     def get_team1_dict(self):
         team_dict = dict()
         team_dict[self.players[0].name] = {
-            "cards": self.players[0].hand, "announcements": self.players[0].valid_announcements, "points": self.players[0].points}
+            "cards": 12, "announcements": self.players[0].valid_announcements, "points": self.players[0].points}
         team_dict[self.players[2].name] = {
-            "cards": self.players[2].hand, "announcements": self.players[2].valid_announcements, "points": self.players[1].points}
+            "cards": self.players[2].hand, "announcements": self.players[2].valid_announcements, "points": self.players[2].points}
 
         return team_dict
 
     def get_team2_dict(self):
         team_dict = dict()
         team_dict[self.players[1].name] = {
-            "cards": self.players[1].hand, "announcements": self.players[1].valid_announcements, "points": self.players[0].points}
+            "cards": self.players[1].hand, "announcements": self.players[1].valid_announcements, "points": self.players[1].points}
         team_dict[self.players[3].name] = {
-            "cards": self.players[3].hand, "announcements": self.players[3].valid_announcements, "points": self.players[1].points}
+            "cards": self.players[3].hand, "announcements": self.players[3].valid_announcements, "points": self.players[3].points}
 
         return team_dict
 
