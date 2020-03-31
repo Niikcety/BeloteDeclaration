@@ -6,7 +6,10 @@ from utils import (
     carres_in, 
     tqq_in, 
     set_lad, 
-    validate_all
+    validate_all,
+    validate_tqq,
+    validate_carres,
+    validate_belotes
     )
 
 class TestFunctionsInUtils(unittest.TestCase):
@@ -82,41 +85,69 @@ class TestFunctionsInUtils(unittest.TestCase):
 
         self.assertEqual(result, expected)
 
-    # def test_hand_with_nothing_in_it(self):
-    #     hand = ['AC', '9H', '8C', '9S', '7C', '9D', '10D', 'QD']
+    def test_hand_with_nothing_in_it(self):
+        hand = ['AC', '9H', '8C', '9S', '7C', '9D', '10D', 'QD']
 
-    #     result = declarations_in(hand)
-    #     expected = [[],[]]
+        result = declarations_in(hand)
+        expected = [[(0,)], [(0,)], [(0,)]]
 
+        self.assertEqual(result, expected)
 
-    # def test_setting_of_lad(self):
-    #     an1 = [[5, 6], [5, 6, 7]]
-    #     an2 = [[28, 29, 30, 31]]
-    #     opp_ann = an1+an2
+    def test_hand_with_belote_quarte_and_carre_in_it(self):
+        hand = ['AC', '9H', 'JC', 'KC', '9C', '9D', '9S', 'QC']
 
-    #     result = set_lad(opp_ann)
-    #     expected = 4.1
+        result = declarations_in(hand)
+        expected = [[(5, 6)], [(2, 11, 20, 29)], [(4, 5, 6, 7)]]
 
-    #     self.assertEqual(result, expected)
+        self.assertEqual(result, expected)
 
-    # def test_setting_of_lad_with_empty_opp_announcements(self):
-    #     an1 = [[], []]
-    #     an2 = [[]]
-    #     opp_ann = an1+an2
+    def test_validate_with_lad_bigger_than_tierce_smaller_than_quarte(self):
+        announcements = [(1, 2, 3), (10, 11, 12, 13)]
+        lad = 4
 
-    #     result = set_lad(opp_ann)
-    #     expected = 0
+        string_result = validate_tqq(announcements, lad)[0]
+        string_expected = ['quarte']
 
-    #     self.assertEqual(result, expected)
+        self.assertEqual(string_result, string_expected)
 
-    # def test_invalid_tierce_and_valid_quinte(self):
-    #     ann = [[0, 1, 2],[9, 8, 10, 11, 12]]
-    #     lad = 4
-        
-    #     result = validate_all(ann, 4)
-    #     expected = [[9, 8, 10, 11, 12]]
+        points_result = validate_tqq(announcements, lad)[1]
+        points_expected = 50
 
-    #     self.assertEqual(result, expected)
+        self.assertEqual(points_result, points_expected)
+
+    def test_validate_all_in_hand_with_tierce_belote_and_quinte_with_lad_equal_to_4(self):
+        anns = [[(5, 6,)], [(0,)], [(4, 5, 6), (21, 22, 23, 24, 25)]]
+        trump = 'Clubs'
+        lad = 4
+
+        string_result = validate_all(anns, trump, lad)[0]
+        points_result = validate_all(anns, trump, lad)[1]
+
+        string_expected = ['belote', 'quinte']
+        points_expected = 120
+
+        self.assertEqual(string_result, string_expected)
+        self.assertEqual(points_result, points_expected)
+
+    def test_setting_of_lad(self):
+        an1 = ['belote', 'tierce']
+        an2 = ['quinte']
+        opp_ann = an1+an2
+
+        result = set_lad(opp_ann)
+        expected = 5
+
+        self.assertEqual(result, expected)
+
+    def test_setting_of_lad_with_empty_opp_announcements(self):
+        an1 = []
+        an2 = []
+        opp_ann = an1+an2
+
+        result = set_lad(opp_ann)
+        expected = 0
+
+        self.assertEqual(result, expected)
 
 if __name__ == '__main__':
     unittest.main()

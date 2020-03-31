@@ -28,5 +28,6 @@ while not match_won:
     d.declare_round_trump()
     d.resolve_announcement_conflicts(order)
     d.score_round()
-    d.check_for_wins()
+    d.check_for_won_games()
+    match_won = d.check_for_match_win()
     # TODO: If 2 wins match_won = TRUE
