@@ -25,13 +25,10 @@ class ToJson():
         if not round_number in self.result_dict[game_number]:
             self.result_dict[game_number][round_number] = dict()
 
-        
-        
         self.result_dict[game_number][round_number]['contract'] = self.round_trump
         self.result_dict[game_number][round_number][self.players[0].team_name] = self.get_team1_dict()
-        self.result_dict[game_number][round_number][self.players[2].team_name] = self.get_team2_dict()
+        self.result_dict[game_number][round_number][self.players[1].team_name] = self.get_team2_dict()
 
-        self.save_to_json()
 
 
     def get_team1_dict(self):
@@ -39,16 +36,16 @@ class ToJson():
         team_dict[self.players[0].name] = {
             "cards": self.players[0].hand, "announcements": self.players[0].valid_announcements, "points": self.players[0].points}
         team_dict[self.players[2].name] = {
-            "cards": self.players[2].hand, "announcements": self.players[2].valid_announcements, "points": self.players[1].points}
+            "cards": self.players[2].hand, "announcements": self.players[2].valid_announcements, "points": self.players[2].points}
 
         return team_dict
 
     def get_team2_dict(self):
         team_dict = dict()
         team_dict[self.players[1].name] = {
-            "cards": self.players[1].hand, "announcements": self.players[1].valid_announcements, "points": self.players[0].points}
+            "cards": self.players[1].hand, "announcements": self.players[1].valid_announcements, "points": self.players[1].points}
         team_dict[self.players[3].name] = {
-            "cards": self.players[3].hand, "announcements": self.players[3].valid_announcements, "points": self.players[1].points}
+            "cards": self.players[3].hand, "announcements": self.players[3].valid_announcements, "points": self.players[3].points}
 
         return team_dict
 
@@ -81,7 +78,7 @@ class ToTxt(WriteInFile):
         if(self.players[1].points + self.players[3].points == 0):
             score2 = str(self.players[1].team_points)
         else:
-            score2 = str(self.players[1].team_points) + ' + ' + str(self.players[2].points + self.players[3].points) 
+            score2 = str(self.players[1].team_points) + ' + ' + str(self.players[1].points + self.players[3].points) 
         
         len_to_first_line = len(self.players[0].team_name) + 12
 
@@ -92,7 +89,7 @@ class ToTxt(WriteInFile):
     # printing the score line
     def end_line(self):
         len_to_first_line = len(self.players[0].team_name) + 9
-        string = f'({self.players[0].team_wins})' + len_to_first_line*' ' + '| ' + f'({self.players[2].team_wins})' + '\n'
+        string = f'({self.players[0].team_wins})' + len_to_first_line*' ' + '| ' + f'({self.players[1].team_wins})' + '\n'
         self.write_in_file(self.name, string, 'a')        
 
 

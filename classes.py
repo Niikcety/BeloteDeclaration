@@ -76,6 +76,7 @@ class Dealer(ToJson, ToTxt):
     def score_round(self): #def add_round_score_to_team_score  
         self.write_result()
         self.to_json()
+        
         self.players[0].team_points += self.players[0].points + self.players[2].points
         self.players[2].team_points += self.players[0].points + self.players[2].points
         self.players[0].points = 0
@@ -135,5 +136,6 @@ class Dealer(ToJson, ToTxt):
     def check_for_match_win(self):
         for i in range(2):
             if self.players[i].team_wins == 2:
+                self.save_to_json()
                 return True
         
