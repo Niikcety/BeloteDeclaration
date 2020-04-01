@@ -25,6 +25,7 @@ class Dealer(ToJson, ToTxt):
         self.team1_lad = 0 #lowest allowed declaration, this = opposing team's highest declaration
         self.team2_lad = 0  #lowest allowed declaration, this = opposing team's highest declaration
         self.starter_line()
+        self.line_of_equals()
         super().__init__()
 
     def order(self):
