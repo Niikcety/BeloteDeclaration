@@ -55,23 +55,25 @@ class Dealer(ToJson, ToTxt):
         self.round_trump = choice(trumps)
 
     def resolve_announcement_conflicts(self, order):
+        if self.round_trump == 'No trumps':
+            pass
+        else:
+            for i in range(2):
 
-        for i in range(2):
-
-            for j in range(4):
-                
-                j = j % 4
-                
-                if order[j] == 0 or order[j] == 2:
-                    self.players[order[j]].announce()
-                    self.players[order[j]].valid_announcements = validate_all(self.players[order[j]].all_announcements, self.round_trump, self.team1_lad)[0]
-                    self.players[order[j]].points = validate_all(self.players[order[j]].all_announcements, self.round_trump, self.team1_lad)[1]
-                    self.team2_lad = set_lad(self.players[order[j]].valid_announcements + self.players[order[(j+2)%4]].valid_announcements)
-                else:
-                    self.players[order[j]].announce()
-                    self.players[order[j]].valid_announcements = validate_all(self.players[order[j]].all_announcements, self.round_trump, self.team2_lad)[0]
-                    self.players[order[j]].points = validate_all(self.players[order[j]].all_announcements, self.round_trump, self.team2_lad)[1]
-                    self.team1_lad = set_lad(self.players[order[j]].valid_announcements + self.players[order[(j+2)%4]].valid_announcements)
+                for j in range(4):
+                    
+                    j = j % 4
+                    
+                    if order[j] == 0 or order[j] == 2:
+                        self.players[order[j]].announce()
+                        self.players[order[j]].valid_announcements = validate_all(self.players[order[j]].all_announcements, self.round_trump, self.team1_lad)[0]
+                        self.players[order[j]].points = validate_all(self.players[order[j]].all_announcements, self.round_trump, self.team1_lad)[1]
+                        self.team2_lad = set_lad(self.players[order[j]].valid_announcements + self.players[order[(j+2)%4]].valid_announcements)
+                    else:
+                        self.players[order[j]].announce()
+                        self.players[order[j]].valid_announcements = validate_all(self.players[order[j]].all_announcements, self.round_trump, self.team2_lad)[0]
+                        self.players[order[j]].points = validate_all(self.players[order[j]].all_announcements, self.round_trump, self.team2_lad)[1]
+                        self.team1_lad = set_lad(self.players[order[j]].valid_announcements + self.players[order[(j+2)%4]].valid_announcements)
 
     def score_round(self): #def add_round_score_to_team_score  
         self.write_result()
